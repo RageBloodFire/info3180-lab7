@@ -48,11 +48,11 @@ const Upload = Vue.component('upload-form', {
     <div class="jumbotron">
         <h1>Upload Form</h1>
         <ul class="list">
-            <li v-for="message in messages"class="list">
+            <li v-for="message in messages"class="list mess">
                 {{message.message}}
                 {{message.filename}}
             </li>
-            <li v-for="error in errors"class="list">
+            <li v-for="error in error"class="list err">
                 {{error.error[0]}} <br>
                 {{error.error[1]}}
             </li>
@@ -66,7 +66,7 @@ const Upload = Vue.component('upload-form', {
             <input type="file" id="pho" name="photo"/>
             <br/>
             <br/>
-            <button type="submit" name="submit">Submit</button>
+            <button id="but" type="submit" name="submit">Submit</button>
         </form>
     </div>
    `,
@@ -96,6 +96,8 @@ const Upload = Vue.component('upload-form', {
             .then(function(jsonResponse) {
                 //display a success message
                 console.log(jsonResponse);
+                self.messages = jsonResponse.messages;
+                self.error = jsonResponse.errors;
             })
             .catch(function(error) {
                 console.log(error);

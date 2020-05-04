@@ -73,10 +73,10 @@ def upload():
 		
         return jsonify(messages=messages)
 
-    messages = [{
-		"errors": form_errors(form)
+    error = [{
+		"error": form_errors(form)
 	}]
-    return jsonify(errors = messages)
+    return jsonify(errors = error)
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
