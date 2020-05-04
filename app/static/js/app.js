@@ -12,6 +12,9 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/api/upload" class="nav-link">File Upload</router-link>
+          </li>
         </ul>
       </div>
     </nav>
@@ -40,6 +43,49 @@ const Home = Vue.component('home', {
     }
 });
 
+const Upload = Vue.component('upload-form', {
+   template: `
+    <div class="jumbotron">
+        <h1>Upload Form</h1>
+        <form id="uploadForm" methods="POST" name="uploadForm" @submit.prevent="uploadPhoto" enctype="multipart/form-data">
+            <label for="photo">Upload Photo</label><br/>
+            <input type="file" id=pho name="photo"/>
+            <br/>
+            <br/>
+            <label for="description">Photo Description</label><br/>
+            <textarea type="text" rows="3" cols="30" id="des" name="description"></textarea>
+            <br/>
+            <br/>
+            <button type="submit" name="submit">Submit</button>
+        </form>
+    </div>
+   `,
+    data: function() {
+       return {}
+    },
+    methods: {
+        uploadPhoto: function() {
+            let self = this;
+            
+            fetch("/api/upload", {
+                method: "POST"
+                
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                //display a success message
+                console.log(jsonResponse);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+            
+        }
+    }
+});
+
 const NotFound = Vue.component('not-found', {
     template: `
     <div>
@@ -57,7 +103,7 @@ const router = new VueRouter({
     routes: [
         {path: "/", component: Home},
         // Put other routes here
-
+        {path: "/api/upload", component: Upload},
         // This is a catch all route in case none of the above matches
         {path: "*", component: NotFound}
     ]
