@@ -47,13 +47,23 @@ const Upload = Vue.component('upload-form', {
    template: `
     <div class="jumbotron">
         <h1>Upload Form</h1>
+        <ul class="list">
+            <li v-for="message in messages"class="list">
+                {{message.message}}
+                {{message.filename}}
+            </li>
+            <li v-for="error in errors"class="list">
+                {{error.error[0]}} <br>
+                {{error.error[1]}}
+            </li>
+        </ul>
         <form id="uploadForm" methods="POST" name="uploadForm" @submit.prevent="uploadPhoto" enctype="multipart/form-data">
-            <label for="photo">Upload Photo</label><br/>
-            <input type="file" id=pho name="photo"/>
-            <br/>
-            <br/>
             <label for="description">Photo Description</label><br/>
             <textarea type="text" rows="3" cols="30" id="des" name="description"></textarea>
+            <br/>
+            <br/>
+            <label for="photo">Upload Photo</label><br/>
+            <input type="file" id="pho" name="photo"/>
             <br/>
             <br/>
             <button type="submit" name="submit">Submit</button>
@@ -61,15 +71,24 @@ const Upload = Vue.component('upload-form', {
     </div>
    `,
     data: function() {
-       return {}
+       return {
+           messages: [],
+           errors: []
+       }
     },
     methods: {
         uploadPhoto: function() {
             let self = this;
+            let uploadForm = document.getElementById('uploadForm');
+            let form_data = new FormData(uploadForm);
             
             fetch("/api/upload", {
-                method: "POST"
-                
+                method: 'POST',
+                body: form_data,
+                headers: {
+                    'X-CSRFToken': token
+                },
+                credentials: 'same-origin'
             })
             .then(function(response) {
                 return response.json();

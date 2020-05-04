@@ -4,10 +4,12 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
+import os
 from app import app
 from app.forms import UploadForm
 from flask import render_template, request, jsonify
+from werkzeug.utils import secure_filename
+
 
 UPLOAD_FOLDER = './app/static/uploads'
 
@@ -59,7 +61,7 @@ def upload():
 	
     if form.validate_on_submit() and request.method == "POST":
 	    # Get file data and save to your uploads folder
-        file = request.form['photo']
+        file = request.files['photo']
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		
